@@ -14,27 +14,29 @@ _composer()
 
     local cache=$HOME/.composer-completion
     if [[ -n $special ]]; then
-        if [[ ! -f $cache/packages ]]; then
+        local packages=$cache/packages.list
+        if [ ! -f $packages -o $( which composer ) -nt $packages ]; then
             # checking existance of the packages list
 	        mkdir -p $cache
-            composer show -a | grep -v '^No composer' >$cache/packages
+            composer show -a | grep -v '^No composer' >$packages
         fi
         if [[ $prev != $special ]]; then
             # assume $prev is a package name
-            if [[ $( cat $cache/packages | grep "^$prev" | wc -l ) -gt 0 ]]; then
-                if [[ ! -f $cache/versions/$prev ]]; then
+            if [[ $( cat $packages | grep "^$prev" | wc -l ) -gt 0 ]]; then
+                local versions=$cache/packages/$prev/versions
+                if [ ! -f $versions -o $packages -nt $versions ]; then
                     # checking cache existance
-                    mkdir -p $( dirname $cache/versions/$prev )
+                    mkdir -p $( dirname $versions )
                     composer show $prev | \
                         sed -r -e 's/\x1b\[[0-9]+m//g' | grep ^versions | \
-                        sed -r -e 's/^versions : //' -e 's/, /\n/g' >$cache/versions/$prev
+                        sed -r -e 's/^versions : //' -e 's/, /\n/g' >$versions
                 fi
-                COMPREPLY=( $( cat $cache/versions/$prev | grep "^$cur" | sort -u ) )
+                COMPREPLY=( $( cat $versions | grep "^$cur" | sort -u ) )
             fi
         fi
         if [[ -z $COMPREPLY ]]; then
             # if $prev was not a package
-            COMPREPLY=( $( cat $cache/packages | grep "^$cur" | sort -u ) )
+            COMPREPLY=( $( cat $packages | grep "^$cur" | sort -u ) )
         fi
         return 0
     fi

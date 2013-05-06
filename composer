@@ -33,9 +33,9 @@ _composer()
             --no-interaction --profile --working-dir' -- "$cur" ) )
     else
         COMPREPLY=( $( compgen -W 'about archive config create-project \
-            depends diagnose dump-autoload dumpautoload \
+            depends diagnose dumpautoload \
             help init install list require search \
-            self-update selfupdate show status update validate' -- "$cur" ) )
+            selfupdate show status update validate' -- "$cur" ) )
     fi
 
     return 0

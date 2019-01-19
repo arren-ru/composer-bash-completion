@@ -17,7 +17,7 @@ _composer()
         local packages=$cache/packages.list
         if [ ! -f $packages -o $( which composer ) -nt $packages ]; then
             # checking existance of the packages list
-	        mkdir -p $cache
+            mkdir -p $cache
             composer show -a | grep -v '^No composer' >$packages
         fi
         if [[ $prev != $special ]]; then
@@ -46,10 +46,45 @@ _composer()
             --help --quiet --verbose --version --ansi --no-ansi \
             --no-interaction --profile --working-dir' -- "$cur" ) )
     else
-        COMPREPLY=( $( compgen -W 'about archive config create-project \
-            depends diagnose dumpautoload \
-            help init install list require search \
-            selfupdate show status update validate' -- "$cur" ) )
+        COMPREPLY=( $( compgen -W 'about \
+            archive \
+            browse \
+            check-platform-reqs \
+            clear-cache \
+            clearcache \
+            config \
+            create-project \
+            depends \
+            diagnose \
+            dump-autoload \
+            dumpautoload \
+            exec \
+            global \
+            help \
+            home \
+            i \
+            info \
+            init \
+            install \
+            licenses \
+            list \
+            outdated \
+            prohibits \
+            remove \
+            require \
+            run-script \
+            search \
+            self-update \
+            selfupdate \
+            show \
+            status \
+            suggests \
+            u \
+            update \
+            upgrade \
+            validate \
+            why \
+            why-not' -- "$cur" ) )
     fi
 
     return 0
